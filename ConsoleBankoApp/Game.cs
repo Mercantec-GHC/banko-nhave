@@ -21,8 +21,6 @@ namespace ConsoleBankoApp
 
         public void run()
         {
-            //Console.Clear();
-
             Console.WriteLine("Game Started.\n");
 
             PrintPlates();
@@ -109,7 +107,6 @@ namespace ConsoleBankoApp
             {
                 Plate plate = this.allPlates[i];
                 bool plateHasBanko = plate.hasBanko(this.numbersPicked, rowsNeeded);
-                //Console.WriteLine($"{plate.GetID()}: {plateHasBanko}");
                 if (plateHasBanko)
                 {
                     banko = true;
