@@ -38,7 +38,9 @@ namespace ConsoleBankoApp
             //    [8,19,0,38,0,59,0,77,0]
             //]));
 
-            LoadPlatesFromJSON(game, "C:/Users/nhave/Code/c#/banko-nhave/ConsoleBankoApp/plates.json");
+            //LoadPlatesFromJSON(game, "C:/Users/nhave/Code/c#/banko-nhave/ConsoleBankoApp/plates.json");
+
+            WebIntegration.BuildPlatesFromWeb(game, "nhave", 100);
 
             game.run();
         }

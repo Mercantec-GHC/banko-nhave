@@ -39,6 +39,8 @@ namespace ConsoleBankoApp
                 PrintPlates();
                 PrintMessage(msg);
                 PrintPickedNumbers();
+
+                // Mangler en måde at øge banko counter hvis en plade som ikke er overvåget af denne.
                 if (HasBanko(banko)) banko++;
             }
         }
