@@ -1,11 +1,9 @@
 ﻿namespace ConsoleBankoApp
 {
-    class Game
+    class Game()
     {
         private List<Plate> allPlates = new List<Plate>();
         private List<int> numbersPicked = new List<int>();
-
-        public Game() { }
 
         // Tilføjer en plade til dette spil.
         public void addPlate(Plate plate)

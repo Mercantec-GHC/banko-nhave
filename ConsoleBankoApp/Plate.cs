@@ -3,17 +3,11 @@ using System.Text;
 
 namespace ConsoleBankoApp
 {
-    class Plate
+    class Plate(string id)
     {
-        private Random rand;
-        private int[][] rows;
-        private string id;
-
-        public Plate(string id)
-        {
-            this.id = id;
-            this.rand = new Random(GetSeedFromString(id));
-        }
+        private Random rand = new Random(GetSeedFromString(id));
+        private int[][]? rows;
+        private string id = id;
 
         public Plate LoadPlate(int[][] rows)
         {
