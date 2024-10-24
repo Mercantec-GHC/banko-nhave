@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleBankoApp
 {
@@ -135,7 +131,7 @@ namespace ConsoleBankoApp
                     int number = this.rows[row][col];
 
                     if (number > 0 && !numbersPicked.Contains(number)) break;
-                    else if (col+1 == this.rows[row].Length) bankoCount++;
+                    else if (col + 1 == this.rows[row].Length) bankoCount++;
                 }
             }
             return bankoCount >= rowsNeeded;
