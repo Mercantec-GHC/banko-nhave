@@ -6,45 +6,50 @@ namespace ConsoleBankoApp
     {
         static void Main(string[] args)
         {
+            // Initialiserer Spillet.
             Game game = new Game();
 
-            //game.addPlate(new Plate("Bob").BuildPlate().PrintPlateTest());
-            //game.addPlate(new Plate("Kurt").BuildPlate().PrintPlateTest());
-            //game.addPlate(new Plate("Ib").BuildPlate().PrintPlateTest());
+            // Spørger spilleren hvad deres grund id skal være og giver dem muligheden for at lave det om.
+            string? plateID = null;
+            while (plateID == null)
+            {
+                Console.Clear();
+                Console.Write("Please enter a base id for the plates you want: ");
+                string? id = Console.ReadLine();
+                if (id != null && id.Length > 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Is {id} correct? (Y/n)");
+                    string? confirm = Console.ReadLine();
+                    if (confirm != null && confirm.ToLower() == "y") plateID = id;
+                }
+            }
 
-            //game.addPlate(new Plate("nhave").LoadPlate([
-            //    [3,16,20,0,0,0,0,76,81],
-            //    [0,0,24,32,44,0,65,77,0],
-            //    [5,19,29,0,47,59,0,0,0]
-            //]));
-            //game.addPlate(new Plate("nhave1").LoadPlate([
-            //    [5,0,24,30,41,51,0,0,0],
-            //    [0,12,26,0,0,53,0,74,84],
-            //    [0,14,27,0,0,56,66,75,0]
-            //]));
-            //game.addPlate(new Plate("nhave2").LoadPlate([
-            //    [0,10,0,34,41,52,63,0,0],
-            //    [8,13,25,36,0,0,0,74,0],
-            //    [0,0,0,39,49,59,67,0,89]
-            //]));
-            //game.addPlate(new Plate("nhave3").LoadPlate([
-            //    [0,11,20,31,43,0,64,0,0],
-            //    [6,17,0,0,0,56,66,77,0],
-            //    [0,18,22,0,0,0,68,79,90]
-            //]));
-            //game.addPlate(new Plate("nhave4").LoadPlate([
-            //    [0,10,23,0,0,0,62,71,81],
-            //    [6,0,0,0,43,0,64,75,84],
-            //    [8,19,0,38,0,59,0,77,0]
-            //]));
+            // Spørger spilleren hvor mange plade de vil have og giver dem muligheden for at lave det om.
+            int plateAmount = 0;
+            while (plateAmount <= 0)
+            {
+                Console.Clear();
+                Console.Write("Please enter the amount of plates you want: ");
+                string? amount = Console.ReadLine();
+                int amountOut = 0;
+                if (int.TryParse(amount, out amountOut) && amountOut > 0)
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Is {amountOut} correct? (Y/n)");
+                    string? confirm = Console.ReadLine();
+                    if (confirm != null && confirm.ToLower() == "y") plateAmount = amountOut;
+                }
+            }
 
-            //LoadPlatesFromJSON(game, "C:/Users/nhave/Code/c#/banko-nhave/ConsoleBankoApp/plates.json");
+            // Kalder Selenium web integrationen og beder den generere de plader som skal bruges.
+            WebIntegration.BuildPlatesFromWeb(game, plateID, plateAmount);
 
-            WebIntegration.BuildPlatesFromWeb(game, "nhave", 100);
-
+            // Når alt er klart, startes spillet.
             game.run();
         }
 
+        // Midlertidig kode til at læse plader ind fra et JSON dokument.
         private static void LoadPlatesFromJSON(Game game, string jsonPath)
         {
             using (StreamReader r = new StreamReader(jsonPath))

@@ -14,13 +14,19 @@ namespace ConsoleBankoApp
 
         public Game() { }
 
+        // Tilføjer en plade til dette spil.
         public void addPlate(Plate plate)
         {
             this.allPlates.Add(plate);
         }
 
+        // Dette er koden som starter selve spillet.
         public void run()
         {
+            // "\x1b[3J" bliver brugt til at rydde hele consollen da Console.Clear() kun kan rydde et hvis antal linjer.
+            Console.WriteLine("\x1b[3J");
+            Console.Clear();
+
             Console.WriteLine("Game Started.\n");
 
             PrintPlates();
@@ -40,11 +46,12 @@ namespace ConsoleBankoApp
                 PrintMessage(msg);
                 PrintPickedNumbers();
 
-                // Mangler en måde at øge banko counter hvis en plade som ikke er overvåget af denne.
-                if (HasBanko(banko)) banko++;
+                // Kontrollerer om er banko på en plade eller en anden spiller, hvis der bliver skrevet "u".
+                if ((input != null && input.ToLower() == "u") || HasBanko(banko)) banko++;
             }
         }
 
+        // Tilføjer et nummer til listen af trukkede numre og afleverer en besked baseret på det input den har fået.
         private string? AddNumber(string? numberIn)
         {
             if (numberIn == null || numberIn == string.Empty) return null;
@@ -66,17 +73,23 @@ namespace ConsoleBankoApp
                     return "Please write a number between 1 & 90!";
                 }
             }
+            else if (numberIn.ToLower() == "u")
+            {
+                return "Too bad, someone else had a Banko!";
+            }
             else
             {
                 return "Please write a number instead!";
             }
         }
 
+        // Brugt til at printe beskeden fra AddNumber, men kun hvis den ikke er null.
         private void PrintMessage(string? message)
         {
             if (message != null) Console.WriteLine(message);
         }
 
+        // Printer listen med trukkede numre, i den rækkefølge de blev trukket.
         private void PrintPickedNumbers()
         {
             if (this.numbersPicked.Count > 0)
@@ -91,6 +104,7 @@ namespace ConsoleBankoApp
             }
         }
 
+        // Kode til at printe all pladerne i spillet.
         private void PrintPlates()
         {
             for (int i = 0; i < this.allPlates.Count; i++)
@@ -101,6 +115,7 @@ namespace ConsoleBankoApp
             }
         }
 
+        // Kontrollerer alle pladerne for banko, baseret på det antal rækker der spilles om.
         private bool HasBanko(int rowsNeeded)
         {
             bool banko = false;

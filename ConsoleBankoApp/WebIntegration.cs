@@ -12,14 +12,27 @@ namespace ConsoleBankoApp
 {
     internal class WebIntegration
     {
+        // Bruger Selenium til at scrape data om pladerne fra siden https://mercantech.github.io/Banko/
         public static void BuildPlatesFromWeb(Game game, string id, int numberOfPlates)
         {
-            IWebDriver driver = new ChromeDriver();
+            Console.Clear();
+            Console.WriteLine($"Grabbing {numberOfPlates} plates from 'https://mercantech.github.io/Banko/' with an id of {id}\n");
 
+            // Opretter en ChromeDriverService og skjuler dens CommandPrompt.
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+            service.HideCommandPromptWindow = true;
+
+            // Opretter ChromeOptions og tilføjer "headless" til den for at skjule browser vinduet.
+            var options = new ChromeOptions();
+            options.AddArgument("headless");
+
+            // Starter Chrome Driveren.
+            IWebDriver driver = new ChromeDriver(service, options);
+
+            // Navigerer til siden.
             driver.Navigate().GoToUrl("https://mercantech.github.io/Banko/");
 
-            var title = driver.Title;
-
+            // Sætter driveren til at vente 500 millisekunder for at sikre at siden er blevet fuldt indlæst.
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);
 
             var textBox = driver.FindElement(By.Id("tekstboks"));
@@ -27,7 +40,7 @@ namespace ConsoleBankoApp
 
             for (int i = 0; i < numberOfPlates; i++)
             {
-                string plateID = $"{id}{i}";
+                string plateID = $"{id}{i+1}";
 
                 textBox.Clear();
                 textBox.SendKeys(plateID);
@@ -35,7 +48,7 @@ namespace ConsoleBankoApp
 
                 IWebElement table = driver.FindElement(By.Id("p1"));
 
-                int[][] plate = CreateBankoArray();
+                int[][] bankoArray = CreateBankoArray();
 
                 string[] result = Regex.Split(table.Text, @"\s+");
 
@@ -44,15 +57,25 @@ namespace ConsoleBankoApp
                     int number = int.Parse(result[j]);
                     int row = (j == 0 ? 0 : j / 5);
                     int col = GetCollumnFromRange(number);
-                    plate[row][col] = number;
+                    bankoArray[row][col] = number;
                 }
 
-                game.addPlate(new Plate(plateID).LoadPlate(plate));
+                Plate plate = new Plate(plateID).LoadPlate(bankoArray);
+
+                Console.WriteLine($"Build plate with id: {plateID}");
+                plate.PrintPlate();
+
+                game.addPlate(plate);
             }
 
             driver.Quit();
+
+            Console.WriteLine("\x1b[3J");
+            Console.Clear();
         }
 
+        // Ny kode til hurtigt at generere det array som skal indeholde en plades rækker,
+        // hvor alle felte oprindeligt indeholder taldet '0'.
         private static int[][] CreateBankoArray()
         {
             int[][] array = [
@@ -64,6 +87,7 @@ namespace ConsoleBankoApp
             return array;
         }
 
+        // Simpel funktion til at finde den søjle et tal skal indsættes i.
         private static int GetCollumnFromRange(int input)
         {
             int col = 0;

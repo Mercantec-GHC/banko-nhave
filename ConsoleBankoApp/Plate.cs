@@ -26,6 +26,9 @@ namespace ConsoleBankoApp
             return this;
         }
 
+        // Bygger en tilfældig plade, dog mangler der sortering af hver søjle.
+        // Denne kode er skrevet, fordi jeg havde misfortået starten af selve opgaven.
+        // Men jeg lader den ligge her for at vise den kode jeg har skrevet til det.
         public Plate BuildRandomPlate()
         {
             Console.WriteLine($"Plate ID: {this.id}");
@@ -37,11 +40,13 @@ namespace ConsoleBankoApp
             return this;
         }
 
+        // Getter funktion til at få pladen id uden at kunne ændre den.
         public string GetID()
         {
             return this.id;
         }
 
+        // Kode brugt til at generere lister med de numre som kan være i hver søjle.
         private List<List<int>> BuildColNumbers()
         {
             int[][] rowContents = [[1, 9], [10, 19], [20, 29], [30, 39], [40, 49], [50, 59], [60, 69], [70, 79], [80, 90]];
@@ -53,16 +58,14 @@ namespace ConsoleBankoApp
                 for (int number = rowContents[col][0]; number <= rowContents[col][1]; number++)
                 {
                     colNumbers.Add(number);
-                    //Console.Write(number + " ");
                 }
-                //Console.WriteLine();
                 allNumbers.Add(colNumbers);
             }
-            //Console.WriteLine();
 
             return allNumbers;
         }
 
+        // Bygger rækkerne og henter tal fra listerne fået fra funktionen BuildColNumbers()
         private int[][] buildRows(List<List<int>> allNumbers)
         {
             int[][] rows = new int[3][];
@@ -93,11 +96,14 @@ namespace ConsoleBankoApp
             return rows;
         }
 
+        // Simpel funktion til at printe pladen til konsollen.
+        // Kalder PrintPlate(numbersPicked) med en tom liste.
         public Plate PrintPlate()
         {
             return PrintPlate(new List<int>());
         }
 
+        // Kode til at printe pladen til konsollen med XX i stedet for de numre der er blevet trukket.
         public Plate PrintPlate(List<int> numbersPicked)
         {
             for (int row = 0; row < this.rows.Length; row++)
@@ -118,6 +124,7 @@ namespace ConsoleBankoApp
             return this;
         }
 
+        // Bruger en liste med numre trukket og rækker nødvendigt, og kontrollere om der er Banko på denne plade.
         public bool hasBanko(List<int> numbersPicked, int rowsNeeded)
         {
             int bankoCount = 0;
@@ -134,6 +141,7 @@ namespace ConsoleBankoApp
             return bankoCount >= rowsNeeded;
         }
 
+        // Tidlig kode til at generere et seed til denne plades Random.
         public static int GetSeedFromString(string value)
         {
             using (var md5 = MD5.Create())
